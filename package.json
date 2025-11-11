@@ -1,0 +1,19 @@
+{
+  "name": "quantum-voice-ai",
+  "version": "1.0.0",
+  "description": "Pseudo quantum entanglement communication using Local AI",
+  "main": "index.html",
+  "scripts": {
+    "dev": "python3 -m http.server 3000",
+    "build": "echo 'No build process needed'"
+  },
+  "keywords": [
+    "quantum",
+    "ai",
+    "voice",
+    "webrtc",
+    "mobile"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}

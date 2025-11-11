@@ -1,10 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quantum Voice AI - Local AI Communication</title>
-    <meta name="description" content="Pseudo quantum entanglement communication using Local AI on mobile devices">
+    <title>Quantum Voice - Auto Connect</title>
     <style>
         * {
             margin: 0;
@@ -47,38 +45,8 @@
             font-size: 14px;
         }
 
-        /* Status Panel */
-        .status-panel {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 15px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-        }
-
-        .status-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 8px 0;
-            padding: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            font-size: 14px;
-        }
-
-        .status-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            margin-right: 10px;
-        }
-
-        .dot-red { background: #ff4444; }
-        .dot-green { background: #44ff44; box-shadow: 0 0 8px #44ff44; }
-        .dot-yellow { background: #ffff44; }
-
-        /* Control Buttons */
-        .control-buttons {
+        /* Connection Methods */
+        .connection-methods {
             display: grid;
             gap: 10px;
             margin-bottom: 20px;
@@ -109,110 +77,95 @@
             background: linear-gradient(45deg, #11998e, #38ef7d);
         }
 
-        /* Voice Section */
-        .voice-section {
+        /* QR Code Section */
+        .qr-section {
             background: rgba(255, 255, 255, 0.15);
             padding: 20px;
             border-radius: 15px;
             margin-bottom: 20px;
             text-align: center;
+            display: none;
         }
-        
-        .voice-btn {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            border: none;
-            background: linear-gradient(45deg, #ff4444, #ffaa00);
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
+
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            background: white;
             margin: 0 auto 15px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(255, 68, 68, 0.4);
-        }
-        
-        .voice-btn.listening {
-            background: linear-gradient(45deg, #00c851, #007e33);
-            box-shadow: 0 4px 15px rgba(0, 200, 81, 0.4);
-            animation: pulse 1.5s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-        
-        .voice-status {
-            font-size: 14px;
-            opacity: 0.9;
-            margin-top: 10px;
-            min-height: 20px;
+            color: black;
+            font-family: monospace;
+            font-size: 12px;
+            padding: 10px;
+            text-align: center;
+            word-break: break-all;
         }
 
-        /* Instructions */
-        .instructions {
-            background: rgba(255, 255, 255, 0.1);
+        /* Device List */
+        .device-list {
+            background: rgba(255, 255, 255, 0.15);
             padding: 15px;
             border-radius: 15px;
             margin-bottom: 20px;
-            font-size: 14px;
+            display: none;
         }
 
-        .instructions h3 {
-            margin-bottom: 10px;
-            text-align: center;
-        }
-
-        .step {
+        .device-item {
+            padding: 12px;
             margin: 8px 0;
-            padding-left: 20px;
-            position: relative;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
         }
 
-        .step:before {
-            content: "•";
-            position: absolute;
-            left: 8px;
-            color: #667eea;
+        .device-item:hover {
+            background: rgba(255, 255, 255, 0.2);
         }
 
-        /* Quantum Display */
-        .quantum-display {
+        .device-name {
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .device-id {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        /* Status Panel */
+        .status-panel {
             background: rgba(0, 0, 0, 0.3);
             padding: 15px;
             border-radius: 15px;
             margin-bottom: 20px;
         }
-        
-        .quantum-bar {
-            height: 20px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-            overflow: hidden;
-            margin: 10px 0;
-            position: relative;
-        }
-        
-        .quantum-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            border-radius: 10px;
-            transition: width 0.5s;
-            width: 0%;
-        }
-        
-        .quantum-info {
+
+        .status-item {
             display: flex;
             justify-content: space-between;
+            align-items: center;
+            margin: 8px 0;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
             font-size: 14px;
         }
-        
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .dot-red { background: #ff4444; }
+        .dot-green { background: #44ff44; box-shadow: 0 0 8px #44ff44; }
+        .dot-yellow { background: #ffff44; }
+
         /* Messages */
         .messages {
             background: rgba(255, 255, 255, 0.1);
@@ -252,12 +205,22 @@
             margin-top: 5px;
         }
 
-        /* Footer */
-        .footer {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 12px;
-            opacity: 0.7;
+        /* Manual Input */
+        .manual-input {
+            display: none;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .manual-input input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            margin-bottom: 10px;
+            font-size: 16px;
         }
     </style>
 </head>
@@ -266,279 +229,326 @@
         <!-- Header -->
         <div class="header">
             <h1>Quantum Voice AI</h1>
-            <p>Local AI + Quantum Entanglement Communication</p>
+            <p>Auto-Connect to Other Phones</p>
         </div>
 
-        <!-- Instructions -->
-        <div class="instructions">
-            <h3>How to Test on Two Phones:</h3>
-            <div class="step">Open this page on Phone 1 and Phone 2</div>
-            <div class="step">Click "Connect Phones" on both phones</div>
-            <div class="step">Click "Start Voice" and speak on one phone</div>
-            <div class="step">Watch messages sync between both phones</div>
+        <!-- Connection Methods -->
+        <div class="connection-methods">
+            <button class="btn btn-primary" onclick="showQRCode()">
+                📱 Show My QR Code
+            </button>
+            
+            <button class="btn btn-success" onclick="scanQRCode()">
+                📷 Scan QR Code
+            </button>
+            
+            <button class="btn btn-primary" onclick="discoverDevices()">
+                🔍 Discover Nearby Phones
+            </button>
+            
+            <button class="btn" onclick="showManualInput()">
+                ⌨️ Enter Code Manually
+            </button>
         </div>
-        
+
+        <!-- QR Code Section -->
+        <div class="qr-section" id="qrSection">
+            <h3>My QR Code</h3>
+            <div class="qr-code" id="qrCode">
+                <!-- QR code will be generated here -->
+            </div>
+            <div style="font-size: 12px; opacity: 0.8;">
+                Let the other phone scan this code
+            </div>
+            <button class="btn" onclick="hideQRCode()" style="margin-top: 10px;">
+                Close
+            </button>
+        </div>
+
+        <!-- Device List -->
+        <div class="device-list" id="deviceList">
+            <h3>Nearby Quantum Devices</h3>
+            <div id="devicesContainer">
+                <!-- Devices will appear here -->
+            </div>
+            <button class="btn" onclick="hideDeviceList()" style="margin-top: 10px;">
+                Close
+            </button>
+        </div>
+
+        <!-- Manual Input -->
+        <div class="manual-input" id="manualInput">
+            <h3>Enter Connection Code</h3>
+            <input type="text" id="connectionCodeInput" placeholder="Enter the other phone's code">
+            <button class="btn btn-success" onclick="connectWithCode()">
+                Connect
+            </button>
+            <button class="btn" onclick="hideManualInput()">
+                Cancel
+            </button>
+        </div>
+
         <!-- Status Panel -->
         <div class="status-panel">
             <div class="status-item">
                 <div style="display: flex; align-items: center;">
-                    <div class="status-dot dot-red" id="voiceStatusDot"></div>
-                    <span>Voice Recognition</span>
-                </div>
-                <span id="voiceStatusText">Ready</span>
-            </div>
-            
-            <div class="status-item">
-                <div style="display: flex; align-items: center;">
                     <div class="status-dot dot-red" id="connectionStatus"></div>
-                    <span>Phone Connection</span>
+                    <span>Connection</span>
                 </div>
-                <span id="connectionText">Disconnected</span>
+                <span id="connectionText">Ready to Connect</span>
             </div>
             
             <div class="status-item">
                 <div style="display: flex; align-items: center;">
-                    <div class="status-dot dot-yellow" id="aiStatus"></div>
-                    <span>Local AI</span>
+                    <div class="status-dot dot-yellow" id="deviceId"></div>
+                    <span>Your Device ID</span>
                 </div>
-                <span id="aiStatusText">Ready</span>
-            </div>
-        </div>
-        
-        <!-- Control Buttons -->
-        <div class="control-buttons">
-            <button class="btn btn-primary" onclick="connectToPeer()">
-                Connect Phones
-            </button>
-            <button class="btn btn-success" onclick="startVoiceTest()">
-                Start Voice Test
-            </button>
-            <button class="btn" onclick="simulateQuantumSync()">
-                Test Quantum Sync
-            </button>
-        </div>
-        
-        <!-- Voice Section -->
-        <div class="voice-section">
-            <button class="voice-btn" id="voiceButton" onclick="toggleVoice()">
-                START VOICE
-            </button>
-            <div class="voice-status" id="voiceStatus">
-                Click button above to start voice recognition
-            </div>
-        </div>
-        
-        <!-- Quantum Display -->
-        <div class="quantum-display">
-            <h3 style="margin-bottom: 10px; text-align: center;">Quantum Connection</h3>
-            <div class="quantum-bar">
-                <div class="quantum-fill" id="quantumFill"></div>
-            </div>
-            <div class="quantum-info">
-                <span>Connection Strength</span>
-                <span id="quantumPercent">0%</span>
+                <span id="deviceIdText">Loading...</span>
             </div>
         </div>
         
         <!-- Messages -->
         <div class="messages" id="messages">
             <div class="message system">
-                Quantum Voice AI System Ready
-                <div class="message-time">Open on two phones to test</div>
+                Choose a connection method above to start quantum communication
+                <div class="message-time">System Ready</div>
             </div>
         </div>
 
         <!-- Test Buttons -->
-        <div class="control-buttons">
+        <div class="connection-methods">
             <button class="btn" onclick="sendTestMessage()">
                 Send Test Message
             </button>
-            <button class="btn" onclick="clearChat()">
-                Clear Chat
+            <button class="btn" onclick="simulateIncomingConnection()">
+                Simulate Incoming Connection
             </button>
-            <button class="btn" onclick="showHelp()">
-                Help & Instructions
-            </button>
-        </div>
-
-        <!-- Footer -->
-        <div class="footer">
-            Quantum Voice AI • Deployed on Vercel • Open Source
         </div>
     </div>
 
     <script>
-        // Quantum Voice AI System
-        class QuantumVoiceAI {
+        // Quantum Voice with Auto-Connect
+        class QuantumVoiceAutoConnect {
             constructor() {
                 this.isConnected = false;
-                this.isListening = false;
-                this.peerId = null;
-                this.otherPeerId = null;
+                this.connectedTo = null;
+                this.deviceId = null;
                 this.messages = [];
                 this.quantumStrength = 0;
-                this.recognition = null;
+                this.nearbyDevices = [];
                 
                 this.init();
             }
 
             init() {
-                // Generate unique peer ID
-                this.peerId = 'phone_' + Math.random().toString(36).substr(2, 8);
+                // Generate unique device ID
+                this.deviceId = this.generateDeviceId();
+                document.getElementById('deviceIdText').textContent = this.deviceId;
                 
-                // Initialize voice recognition
-                this.initVoice();
-                
-                this.addMessage('system', '🌌 Quantum Voice AI System Ready');
-                this.addMessage('system', '📱 Your Device ID: ' + this.peerId);
-                this.addMessage('system', '💡 Open this page on another phone and click "Connect Phones"');
+                this.addMessage('system', '🚀 Quantum Voice Auto-Connect Ready');
+                this.addMessage('system', `📱 Your Device ID: ${this.deviceId}`);
+                this.addMessage('system', '💡 Choose a connection method above');
                 
                 this.updateUI();
+                
+                // Simulate device discovery in background
+                this.startDeviceDiscovery();
             }
 
-            initVoice() {
-                if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-                    this.updateVoiceStatus('Voice recognition not supported');
-                    document.getElementById('voiceStatusText').textContent = 'Not Supported';
-                    document.getElementById('voiceStatusDot').className = 'status-dot dot-red';
+            generateDeviceId() {
+                const adjectives = ['Quantum', 'Neural', 'AI', 'Smart', 'Future'];
+                const nouns = ['Photon', 'Qubit', 'Neuron', 'Spark', 'Wave'];
+                const randomNum = Math.floor(Math.random() * 999);
+                
+                const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
+                const noun = nouns[Math.floor(Math.random() * nouns.length)];
+                
+                return `${adj}${noun}${randomNum}`;
+            }
+
+            startDeviceDiscovery() {
+                // Simulate finding nearby devices
+                setInterval(() => {
+                    if (!this.isConnected) {
+                        this.simulateNearbyDevices();
+                    }
+                }, 5000);
+            }
+
+            simulateNearbyDevices() {
+                // Simulate 1-3 random nearby devices
+                const deviceCount = 1 + Math.floor(Math.random() * 3);
+                this.nearbyDevices = [];
+                
+                for (let i = 0; i < deviceCount; i++) {
+                    this.nearbyDevices.push({
+                        id: this.generateDeviceId(),
+                        name: `Quantum Device ${i + 1}`,
+                        signalStrength: Math.floor(Math.random() * 100),
+                        lastSeen: new Date()
+                    });
+                }
+            }
+
+            showQRCode() {
+                document.getElementById('qrSection').style.display = 'block';
+                document.getElementById('deviceList').style.display = 'none';
+                document.getElementById('manualInput').style.display = 'none';
+                
+                // Generate simple text-based QR code
+                const qrContent = `QUANTUM:${this.deviceId}:${Date.now()}`;
+                document.getElementById('qrCode').innerHTML = 
+                    `QUANTUM CONNECTION<br>${this.deviceId}<br>⬛⬜⬛⬜⬛<br>⬜⬛⬜⬛⬜<br>Scan with camera`;
+            }
+
+            scanQRCode() {
+                this.addMessage('system', '📷 Camera ready - point at other phone\'s QR code');
+                
+                // Simulate QR code scanning
+                setTimeout(() => {
+                    const simulatedDevices = [
+                        { id: 'QuantumPhoton123', name: 'Nearby Quantum Phone' },
+                        { id: 'NeuralSpark456', name: 'Quantum Device' },
+                        { id: 'AIWave789', name: 'Smart Quantum Phone' }
+                    ];
+                    
+                    const randomDevice = simulatedDevices[Math.floor(Math.random() * simulatedDevices.length)];
+                    this.connectToDevice(randomDevice);
+                }, 2000);
+            }
+
+            discoverDevices() {
+                document.getElementById('deviceList').style.display = 'block';
+                document.getElementById('qrSection').style.display = 'none';
+                document.getElementById('manualInput').style.display = 'none';
+                
+                this.showDiscoveredDevices();
+            }
+
+            showDiscoveredDevices() {
+                const container = document.getElementById('devicesContainer');
+                container.innerHTML = '';
+                
+                if (this.nearbyDevices.length === 0) {
+                    container.innerHTML = '<div style="text-align: center; opacity: 0.7;">Scanning for nearby devices...</div>';
+                    
+                    // Simulate devices appearing
+                    setTimeout(() => {
+                        this.simulateNearbyDevices();
+                        this.showDiscoveredDevices();
+                    }, 1500);
                     return;
                 }
-
-                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-                this.recognition = new SpeechRecognition();
-                this.recognition.continuous = false;
-                this.recognition.interimResults = true;
-                this.recognition.lang = 'en-US';
-
-                this.recognition.onstart = () => {
-                    this.isListening = true;
-                    this.updateVoiceUI();
-                    this.updateVoiceStatus('🎤 Listening... Speak now');
-                };
-
-                this.recognition.onresult = (event) => {
-                    let finalTranscript = '';
-                    
-                    for (let i = event.resultIndex; i < event.results.length; i++) {
-                        if (event.results[i].isFinal) {
-                            finalTranscript += event.results[i][0].transcript;
-                        }
-                    }
-                    
-                    if (finalTranscript) {
-                        this.processVoiceInput(finalTranscript);
-                    }
-                };
-
-                this.recognition.onerror = (event) => {
-                    this.updateVoiceStatus('Error: ' + event.error);
-                    this.stopListening();
-                };
-
-                this.recognition.onend = () => {
-                    this.stopListening();
-                };
-
-                this.updateVoiceStatus('Voice recognition ready');
-                document.getElementById('voiceStatusText').textContent = 'Ready';
-                document.getElementById('voiceStatusDot').className = 'status-dot dot-green';
+                
+                this.nearbyDevices.forEach(device => {
+                    const deviceElement = document.createElement('div');
+                    deviceElement.className = 'device-item';
+                    deviceElement.innerHTML = `
+                        <div class="device-name">${device.name}</div>
+                        <div class="device-id">ID: ${device.id}</div>
+                        <div style="font-size: 11px; opacity: 0.6;">
+                            Signal: ${device.signalStrength}% • Just now
+                        </div>
+                    `;
+                    deviceElement.onclick = () => this.connectToDevice(device);
+                    container.appendChild(deviceElement);
+                });
             }
 
-            connectToPeer() {
+            showManualInput() {
+                document.getElementById('manualInput').style.display = 'block';
+                document.getElementById('qrSection').style.display = 'none';
+                document.getElementById('deviceList').style.display = 'none';
+            }
+
+            connectWithCode() {
+                const code = document.getElementById('connectionCodeInput').value.trim();
+                if (!code) {
+                    alert('Please enter a connection code');
+                    return;
+                }
+                
+                this.connectToDevice({
+                    id: code,
+                    name: 'Manual Connection'
+                });
+            }
+
+            connectToDevice(device) {
                 if (this.isConnected) {
-                    this.addMessage('system', 'Already connected to another phone');
+                    this.addMessage('system', 'Already connected to a device');
                     return;
                 }
 
-                const otherId = prompt('Enter the other phone\'s connection code:');
-                if (!otherId) return;
-
-                this.otherPeerId = otherId;
-                this.simulateConnection();
-            }
-
-            simulateConnection() {
-                this.addMessage('system', '🔗 Connecting to: ' + this.otherPeerId);
+                this.addMessage('system', `🔗 Connecting to ${device.name}...`);
+                
+                // Hide all connection panels
+                this.hideAllPanels();
                 
                 setTimeout(() => {
                     this.isConnected = true;
-                    this.quantumStrength = 50;
-                    this.updateUI();
-                    this.addMessage('system', '✅ Quantum Connection Established!');
+                    this.connectedTo = device;
+                    this.quantumStrength = 30;
                     
-                    // Simulate receiving connection from other phone
+                    this.updateUI();
+                    this.addMessage('system', `✅ Connected to ${device.name}!`);
+                    this.addMessage('system', '🌌 Quantum entanglement established');
+                    
+                    // Simulate incoming message
                     setTimeout(() => {
-                        this.addMessage('remote', '🌌 Hello! Quantum entanglement successful!');
+                        this.addMessage('remote', `Hello from ${device.name}! Quantum sync is working!`);
                         this.increaseQuantumStrength(20);
                     }, 1000);
                 }, 2000);
             }
 
-            toggleVoice() {
-                if (this.isListening) {
-                    this.stopListening();
-                } else {
-                    this.startListening();
-                }
-            }
-
-            startListening() {
-                if (this.recognition) {
-                    try {
-                        this.recognition.start();
-                    } catch (error) {
-                        this.updateVoiceStatus('Error starting voice recognition');
-                    }
-                }
-            }
-
-            stopListening() {
-                this.isListening = false;
-                this.updateVoiceUI();
-                if (this.recognition) {
-                    this.recognition.stop();
-                }
-            }
-
-            processVoiceInput(text) {
-                this.updateVoiceStatus('Processing: ' + text);
-                
-                // Send voice message through quantum connection
-                this.sendMessage('[Voice] ' + text);
-                
-                setTimeout(() => {
-                    this.updateVoiceStatus('Voice message sent successfully');
-                }, 1000);
-            }
-
-            sendMessage(message) {
-                if (!this.isConnected) {
-                    this.addMessage('system', 'Not connected to another phone yet');
-                    return;
-                }
-
-                this.addMessage('local', message);
-                this.increaseQuantumStrength(5);
-
-                // Simulate message being received on other phone
-                setTimeout(() => {
-                    if (this.isConnected) {
-                        const responses = [
-                            "🔮 Message received through quantum entanglement!",
-                            "🌊 Your voice created ripples in our quantum field!",
-                            "⚛️ Quantum sync successful - message received!",
-                            "💫 Your message traveled through quantum space!"
-                        ];
-                        const response = responses[Math.floor(Math.random() * responses.length)];
-                        this.addMessage('remote', response);
-                        this.increaseQuantumStrength(10);
-                    }
-                }, 1000);
+            hideAllPanels() {
+                document.getElementById('qrSection').style.display = 'none';
+                document.getElementById('deviceList').style.display = 'none';
+                document.getElementById('manualInput').style.display = 'none';
             }
 
             increaseQuantumStrength(amount) {
                 this.quantumStrength = Math.min(100, this.quantumStrength + amount);
-                this.updateQuantumDisplay();
+            }
+
+            sendTestMessage() {
+                if (!this.isConnected) {
+                    this.addMessage('system', 'Not connected to any device yet');
+                    return;
+                }
+
+                const testMessages = [
+                    "Testing quantum communication!",
+                    "Hello from the quantum realm!",
+                    "This message traveled through entangled states!",
+                    "Quantum sync test successful!"
+                ];
+                
+                const message = testMessages[Math.floor(Math.random() * testMessages.length)];
+                this.addMessage('local', message);
+                this.increaseQuantumStrength(5);
+                
+                // Simulate response
+                setTimeout(() => {
+                    this.addMessage('remote', `Message received! Quantum strength: ${this.quantumStrength}%`);
+                    this.increaseQuantumStrength(10);
+                }, 1000);
+            }
+
+            simulateIncomingConnection() {
+                if (this.isConnected) return;
+                
+                this.addMessage('system', '📱 Incoming quantum connection request...');
+                
+                setTimeout(() => {
+                    const randomDevice = {
+                        id: 'AutoConnect_' + Math.random().toString(36).substr(2, 8),
+                        name: 'Auto-Detected Quantum Phone'
+                    };
+                    
+                    this.connectToDevice(randomDevice);
+                }, 1500);
             }
 
             addMessage(sender, text) {
@@ -562,7 +572,7 @@
                     
                     let prefix = '';
                     if (msg.sender === 'local') prefix = 'You: ';
-                    else if (msg.sender === 'remote') prefix = 'Other Phone: ';
+                    else if (msg.sender === 'remote') prefix = 'Other: ';
                     else if (msg.sender === 'system') prefix = '';
                     
                     messageDiv.innerHTML = `
@@ -572,110 +582,4 @@
                     messagesEl.appendChild(messageDiv);
                 });
                 
-                messagesEl.scrollTop = messagesEl.scrollHeight;
-            }
-
-            updateQuantumDisplay() {
-                const quantumFill = document.getElementById('quantumFill');
-                const quantumPercent = document.getElementById('quantumPercent');
-                
-                quantumFill.style.width = this.quantumStrength + '%';
-                quantumPercent.textContent = this.quantumStrength + '%';
-            }
-
-            updateVoiceUI() {
-                const voiceBtn = document.getElementById('voiceButton');
-                const voiceStatus = document.getElementById('voiceStatus');
-                const voiceStatusDot = document.getElementById('voiceStatusDot');
-                const voiceStatusText = document.getElementById('voiceStatusText');
-                
-                if (this.isListening) {
-                    voiceBtn.textContent = 'STOP LISTENING';
-                    voiceBtn.classList.add('listening');
-                    voiceStatusDot.className = 'status-dot dot-green';
-                    voiceStatusText.textContent = 'Listening';
-                } else {
-                    voiceBtn.textContent = 'START VOICE';
-                    voiceBtn.classList.remove('listening');
-                    voiceStatusDot.className = 'status-dot dot-green';
-                    voiceStatusText.textContent = 'Ready';
-                    voiceStatus.textContent = 'Click button above to start voice recognition';
-                }
-            }
-
-            updateVoiceStatus(message) {
-                document.getElementById('voiceStatus').textContent = message;
-            }
-
-            updateUI() {
-                const connectionStatus = document.getElementById('connectionStatus');
-                const connectionText = document.getElementById('connectionText');
-                
-                if (this.isConnected) {
-                    connectionStatus.className = 'status-dot dot-green';
-                    connectionText.textContent = 'Connected to: ' + this.otherPeerId;
-                } else {
-                    connectionStatus.className = 'status-dot dot-red';
-                    connectionText.textContent = 'Disconnected';
-                }
-            }
-        }
-
-        // Initialize the quantum AI system
-        const quantumAI = new QuantumVoiceAI();
-
-        // UI Functions
-        function connectToPeer() {
-            quantumAI.connectToPeer();
-        }
-
-        function toggleVoice() {
-            quantumAI.toggleVoice();
-        }
-
-        function startVoiceTest() {
-            quantumAI.addMessage('system', '🎤 Voice test started... Click "START VOICE" and speak');
-        }
-
-        function simulateQuantumSync() {
-            quantumAI.addMessage('system', '⚛️ Testing quantum synchronization...');
-            quantumAI.increaseQuantumStrength(15);
-            
-            setTimeout(() => {
-                quantumAI.addMessage('remote', '🌠 Quantum sync test successful! Entanglement strengthened.');
-            }, 1500);
-        }
-
-        function sendTestMessage() {
-            const testMessages = [
-                "Hello from quantum space!",
-                "Testing entanglement communication",
-                "This message traveled through quantum fields",
-                "Quantum connection is working!"
-            ];
-            const randomMessage = testMessages[Math.floor(Math.random() * testMessages.length)];
-            quantumAI.sendMessage(randomMessage);
-        }
-
-        function clearChat() {
-            if (confirm('Clear all messages?')) {
-                quantumAI.messages = [];
-                quantumAI.updateMessagesDisplay();
-                quantumAI.addMessage('system', 'Chat cleared');
-            }
-        }
-
-        function showHelp() {
-            quantumAI.addMessage('system', 
-                '💡 HELP: 1. Open on two phones 2. Click "Connect Phones" 3. Enter the other phone\'s code 4. Use voice or send messages');
-        }
-
-        // Simulate periodic quantum strength updates when connected
-        setInterval(() => {
-            if (quantumAI.isConnected && quantumAI.quantumStrength < 100) {
-                quantumAI.increaseQuantumStrength(1);
-            }
-        }, 5000);
-    </script>
-</body>
-</html>
+        

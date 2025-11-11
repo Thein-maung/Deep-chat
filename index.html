@@ -582,4 +582,29 @@
                     messagesEl.appendChild(messageDiv);
                 });
                 
+                messagesEl.scrollTop = messagesEl.scrollHeight;
+            }
+
+            updateUI() {
+                const connectionStatus = document.getElementById('connectionStatus');
+                const connectionText = document.getElementById('connectionText');
+                
+                if (this.isConnected) {
+                    connectionStatus.className = 'status-dot dot-green';
+                    connectionText.textContent = `Connected to: ${this.connectedTo.name}`;
+                } else {
+                    connectionStatus.className = 'status-dot dot-red';
+                    connectionText.textContent = 'Ready to Connect';
+                }
+            }
+        }
+
+        // Initialize the system when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            new QuantumVoiceWorking();
+        });
+    </script>
+</body>
+</html>
         
+
